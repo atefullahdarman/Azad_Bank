@@ -1,33 +1,33 @@
-# د بانک مدیریت سیسټم
+# Bank Management System
 
-دا د Laravel 12 او MySQL پر بنسټ د بانک د داخلي عملیاتو ویب اپلېکېشن دی. د XAMPP د محلي MySQL له لارې یې چلوئ.
+This web application uses Laravel 12 and MySQL to manage a bank’s internal operations. It runs locally using MySQL through XAMPP.
 
-## اړتیاوې
+## Requirements
 
-- XAMPP، PHP 8.2 یا لوړ او MySQL/MariaDB
+- XAMPP with PHP 8.2 or later and MySQL or MariaDB
 - Composer
-- Node.js او npm
-- د PHP `pdo_mysql` extension فعاله وي
+- Node.js and npm
+- The PHP `pdo_mysql` extension enabled
 
-## ۱. پروژه خلاصه کړئ
+## 1. Open the project
 
-ZIP فایل په یوه فولډر کې Extract کړئ. په PowerShell کې د پروژې اصلي فولډر ته لاړ شئ؛ هماغه فولډر چې `artisan` او `composer.json` پکې دي.
+Extract the ZIP file into a folder. In PowerShell, navigate to the project’s root folder, which contains `artisan` and `composer.json`.
 
 ```powershell
 cd C:\path\to\banking-system
 ```
 
-## ۲. XAMPP کې ډیټابېس جوړ کړئ
+## 2. Create the database in XAMPP
 
-په XAMPP Control Panel کې MySQL چالان کړئ. د phpMyAdmin د خلاصولو لپاره Apache هم چالانولای شئ، بیا `http://localhost/phpmyadmin` ته لاړ شئ او د `banking_system` په نوم نوی database جوړ کړئ، charset/collation یې `utf8mb4_unicode_ci` وټاکئ.
+Start MySQL in the XAMPP Control Panel. To use phpMyAdmin, also start Apache and open [phpMyAdmin](http://localhost/phpmyadmin). Create a database named `banking_system`, with `utf8mb4` as the character set and `utf8mb4_unicode_ci` as the collation.
 
-یا په phpMyAdmin د SQL ټب کې دا اجرا کړئ:
+Alternatively, run the following in the phpMyAdmin **SQL** tab.
 
 ```sql
 CREATE DATABASE banking_system CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-## ۳. د Laravel چاپېریال برابر کړئ
+## 3. Configure the Laravel environment
 
 ```powershell
 composer install
@@ -35,7 +35,7 @@ Copy-Item .env.example .env
 php artisan key:generate
 ```
 
-`.env` پرانیزئ او د XAMPP د MySQL معلومات برابر کړئ. د XAMPP عادي محلي نصب کې د `root` پاسورډ تش وي:
+Open `.env` and configure the connection to XAMPP’s MySQL server. In a default local XAMPP installation, the `root` password is blank.
 
 ```dotenv
 DB_CONNECTION=mysql
@@ -46,9 +46,9 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-که د MySQL لپاره مو پاسورډ ټاکلی وي، `DB_PASSWORD` ته یې ولیکئ. `.env` شخصي فایل دی؛ له چا سره یې مه شریکوئ.
+If you set a MySQL password, enter it in `DB_PASSWORD`. Keep your `.env` file private.
 
-## ۴. جدولونه او مخکینۍ سرچینې جوړې کړئ
+## 4. Create the database tables and build the frontend assets
 
 ```powershell
 php artisan migrate
@@ -56,39 +56,39 @@ npm install
 npm run build
 ```
 
-د دې کمانډونو له لارې د مشتریانو، حسابونو، معاملو، پورونو او کارنانو جدولونه په MySQL کې جوړېږي. پخوانی شخصي/نمونوي معلومات په ZIP کې نه دي شامل شوي.
+The migration creates the customers, accounts, transactions, loans, and users tables in MySQL. The ZIP file contains no existing personal or sample data.
 
-## ۵. اپلېکېشن چالان کړئ
+## 5. Start the application
 
 ```powershell
 php artisan serve
 ```
 
-بیا په براوزر کې `http://127.0.0.1:8000` خلاص کړئ. د حساب جوړولو لپاره د ثبت پاڼې ته لاړ شئ. نوی ثبت شوی حساب په خوندي ډول د `customer` رول اخلي او د بانک داخلي پاڼې نه شي لیدلای.
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser and go to the registration page to create a user account. New user accounts receive the `customer` role by default, which restricts access to the bank’s internal pages.
 
-که دا ستاسو د محلي نصب لومړنی مدیر وي، حساب ثبتولو وروسته د هماغه پروژې فولډر کې دا کمانډ اجرا کړئ او خپل د ثبت برېښنالیک ورکړئ:
+To set up the first administrator for your local installation, register an account, then run the following command from the project folder. Replace `your-email@example.com` with the email address you registered with.
 
 ```powershell
 php artisan bank:user-role your-email@example.com admin
 ```
 
-د کارکوونکي لپاره `employee` او د مشتری حساب ته د بېرته اړولو لپاره `customer` ولیکئ. مدیر د **Users** له پاڼې هم د نورو کاروونکو رولونه اداره کولای شي.
+Use `employee` to assign the employee role or `customer` to switch an account back to the customer role. Administrators can also manage other users’ roles from the **Users** page.
 
-که پروژه له مخکې چلېده، د **Account Types** لپاره په هماغه ډیټابېس کې `php artisan migrate` یو ځل اجرا کړئ. پخواني حسابونه په **Unclassified** ډول ثبتېږي او ډول یې د **Accounts → Edit** له لارې بدلولای شئ.
+If the application is already set up, run `php artisan migrate` once against the existing database to add **Account Types**. Existing bank accounts are assigned the **Unclassified** type. You can change the type under **Accounts → Edit**.
 
-## د هر ځل چالانولو طریقه
+## Starting the application after setup
 
-1. په XAMPP کې MySQL چالان کړئ.
-2. د پروژې فولډر کې `php artisan serve` اجرا کړئ.
-3. براوزر کې `http://127.0.0.1:8000` خلاص کړئ.
+1. Start MySQL in XAMPP.
+2. Run `php artisan serve` from the project folder.
+3. Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
 
-که د CSS یا JavaScript بدلونونه کوئ، په جلا PowerShell کړکۍ کې `npm run dev` چالان کړئ. د وروستي ZIP لپاره `npm run build` اړین دی.
+If you are editing CSS or JavaScript, run `npm run dev` in a separate PowerShell window. Run `npm run build` before packaging the final ZIP.
 
-## مهم یادښتونه
+## Important notes
 
-- ثبت شوي مشتریان د بانک د حسابونو او معاملو جدولونو ته لاسرسی نه لري. `admin` او `employee` رولونه ورته یوازې د مدیر له خوا ټاکل کېږي.
-- د حسابونو، مشتریانو، معاملاتو او پورونو معلومات په MySQL کې ساتل کېږي.
-- معامله تر تایید مخکې بیلانس نه بدلوي. تایید شوې پیسې د سنټونو پر بنسټ محاسبه کېږي، کم بیلانس لرونکی حساب منفي کېدای نه شي، او بشپړه شوې معامله حذف/بدلېدای نه شي.
-- د یوه کارن درې ناسمې ننوتنې د ۱۵ دقیقو لپاره هغه کارن بندوي.
-- Google Login د OAuth د `client ID` او `client secret` له برابرولو پرته فعالېدای نه شي.
-- په دې محلي Laravel پرمختیايي سرور کې `php artisan serve` د ازموینې/پرمختیا لپاره دی؛ د عامه تولیدي بانکدارۍ خدمت لپاره جلا امنیتي، قانوني او د تادیاتو د تنظیماتو ارزونه پکار ده.
+- Customer users are blocked from accessing the bank’s accounts and transactions tables. Only administrators can assign the `admin` and `employee` roles.
+- Account, customer, transaction, and loan data is stored in MySQL.
+- Transactions affect account balances only after approval. The application calculates approved amounts in cents and prevents transactions from overdrawing an account. Completed transactions are locked against editing and deletion.
+- Three failed login attempts lock the user account for 15 minutes.
+- Google Login requires an OAuth `client ID` and `client secret`.
+- The local Laravel server started with `php artisan serve` is for development and testing. A public production banking service requires a separate review of security, legal requirements, and payment settings.
